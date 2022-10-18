@@ -54,12 +54,7 @@ app.use(cors());
 
 app.get('/', (req, res) => {
   console.log(req.cookies);
-  res.send('e-commerce api');
-});
-
-app.get('/api/v1', (req, res) => {
-  console.log(req.signedCookies);
-  res.send('e-commerce api');
+  res.send('flight-booking-system');
 });
 
 app.use('/api/v1/auth', authRouter);

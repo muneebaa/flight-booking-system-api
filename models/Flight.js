@@ -23,6 +23,10 @@ const FlightsSchema = new mongoose.Schema(
       type: String,
       default: '/uploads/example.jpeg',
     },
+    price: {
+      type: Number,
+      required: [true, 'Please provide flight price'],
+    },
     averageRating: {
       type: Number,
       default: 0,

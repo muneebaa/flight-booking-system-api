@@ -41,15 +41,15 @@ const DepartureFlight = mongoose.Schema(
       required: [true, 'Please provide end time of the flight'],
     },
     stops: {
-      type: String,
+      type: Number,
       required: [true, 'Please provide end time of the flight'],
     },
     stopTime: {
-      type: String,
+      type: [String],
       required: [true, 'Please provide stop time of the flight'],
     },
     stopDestination: {
-      type: String,
+      type: [String],
       required: [true, 'Please provide stop designation of the flight'],
     },
     user: {

@@ -42,7 +42,6 @@ app.use(
   })
 );
 app.use(helmet());
-app.use(cors());
 app.use(xss());
 app.use(mongoSanitize());
 
@@ -50,7 +49,7 @@ app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
 app.use(express.static('./public'));
 app.use(fileUpload({ useTempFiles: true }));
-app.use(cors());
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 
 app.get('/', (req, res) => {
   console.log(req.cookies);
@@ -64,10 +63,15 @@ app.use('/api/v1/reviews', reviewRouter);
 app.use('/api/v1/departureFlights', departureFlightRouter);
 app.use('/api/v1/bookflight', bookFlightRouter);
 
-app.use(notFoundMiddleware);
-app.use(errorHandlerMiddleware);
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
 
-const port = process.env.PORT || 3000;
+app.use(errorHandlerMiddleware);
+app.use(notFoundMiddleware);
+
+const port = process.env.PORT || 5000;
 
 const start = async () => {
   await connectDB(process.env.MONGO_URL);

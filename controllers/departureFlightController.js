@@ -78,10 +78,17 @@ const deleteDepartureFlight = async (req, res) => {
   res.status(StatusCodes.OK).json({ msg: 'flight deleted successfully' });
 };
 
+const getAllFlightDeptFLights = async (req, res) => {
+  const { id: flightId } = req.params;
+  const flights = await DepartureFlight.find({ flight: flightId });
+  res.status(StatusCodes.OK).json({ flights, count: flights.length });
+};
+
 module.exports = {
   createDepartureFlight,
   getAllDepartureFlights,
   getSingleDepartureFlight,
   updateDepartureFlight,
   deleteDepartureFlight,
+  getAllFlightDeptFLights,
 };

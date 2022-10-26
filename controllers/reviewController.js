@@ -87,6 +87,12 @@ const deleteReview = async (req, res) => {
   res.status(StatusCodes.OK).json({ msg: 'Review deleted successfully' });
 };
 
+const getSingleFlightReview = async (req, res) => {
+  const { id: reviewId } = req.params;
+  const review = await Review.find({ flight: reviewId });
+  res.status(StatusCodes.OK).json({ review, count: review.length });
+};
+
 module.exports = {
   createReview,
   getAllReviews,
@@ -94,4 +100,5 @@ module.exports = {
   updateReview,
   deleteReview,
   getCurrentUserReviews,
+  getSingleFlightReview,
 };

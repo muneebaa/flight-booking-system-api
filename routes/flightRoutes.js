@@ -17,6 +17,8 @@ const {
   getAllFlightDeptFLights,
 } = require('../controllers/departureFlightController');
 
+const { getSingleFlightReview } = require('../controllers/reviewController');
+
 router
   .route('/')
   .post([authenticateUser, authorizePermissions('admin')], createFlight)
@@ -29,5 +31,6 @@ router
   .delete([authenticateUser, authorizePermissions('admin')], deleteFlight);
 
 router.route('/:id/departureFlights').get(getAllFlightDeptFLights);
+router.route('/:id/reviews').get(getSingleFlightReview);
 
 module.exports = router;

@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 
-const DepartureFlight = mongoose.Schema(
+let event = new Date('August 19, 1975 23:15:30 GMT+00:00');
+
+const Flights = mongoose.Schema(
   {
     company: {
       type: String,
@@ -20,50 +22,48 @@ const DepartureFlight = mongoose.Schema(
         message: '{VALUE} is not supported',
       },
     },
-    takeOffCity: {
+    origin: {
       type: String,
       required: [true, 'Please provide take off city '],
     },
-    landingCity: {
+    destination: {
       type: String,
-      required: [true, 'Please provide landing city '],
+      // required: [true, 'Please provide landing city '],
     },
     price: {
       type: Number,
       required: [true, 'Please provide price of the flight'],
     },
-    timeStart: {
-      type: String,
-      required: [true, 'Please provide start time of the flight'],
+    depart_time: {
+      type: Date,
+      default: new Date('August 19, 1975 23:15:30 GMT+00:00'),
+      // required: [true, 'Please provide departure time of the flight'],
     },
-    timeEnd: {
-      type: String,
-      required: [true, 'Please provide end time of the flight'],
+    arrival_time: {
+      type: Date,
+      default: new Date('July 20, 69 20:17:40 GMT+00:00'),
+      // required: [true, 'Please provide arrival time of the flight'],
     },
-    stops: {
+    total_seats: {
       type: Number,
-      required: [true, 'Please provide end time of the flight'],
+      default: 0,
     },
-    stopTime: {
-      type: [String],
-      required: [true, 'Please provide stop time of the flight'],
-    },
-    stopDestination: {
-      type: [String],
-      required: [true, 'Please provide stop designation of the flight'],
+    available_seats: {
+      type: Number,
+      default: 0,
     },
     user: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',
       required: true,
     },
-    flight: {
+    place: {
       type: mongoose.Schema.ObjectId,
-      ref: 'Flight',
+      ref: 'Places',
       required: true,
     },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model('DepartureFlight', DepartureFlight);
+module.exports = mongoose.model('Flights', Flights);

@@ -1,39 +1,52 @@
 const { StatusCodes } = require('http-status-codes');
-const Flight = require('../models/Flight');
+const Places = require('../models/Places');
+const Flights = require('../models/Flights');
 
 const CustomError = require('../errors');
-const cloudinary = require('cloudinary').v2;
-
-const getImage = async (image) => {
-  const { secure_url } = await cloudinary.uploader.upload(image, {
-    use_filename: true,
-    folder: 'flights-booking',
-  });
-  return secure_url;
-};
 
 const createFlight = async (req, res) => {
-  const result = await getImage(req.files.image.tempFilePath);
-
   req.body.user = req.user.userId;
-  req.body.image = result;
-  const flight = await Flight.create(req.body);
+  const checkFlight = await Places.findOne({
+    _id: req.body.place,
+  });
+
+  const checkCity = await Places.findOne({
+    city: req.body.origin,
+  });
+
+  if (!checkCity) {
+    throw new CustomError.NotFoundError(` ${req.body.origin} is not available`);
+  }
+
+  if (!checkFlight) {
+    throw new CustomError.NotFoundError(`No place with id : ${req.body.place}`);
+  }
+
+  if (req.body.origin === checkFlight.city) {
+    throw new CustomError.NotFoundError(
+      `origin and destination can not be same`
+    );
+  }
+
+  req.body.destination = checkFlight.city;
+  const flight = await Flights.create(req.body);
+
   res.status(StatusCodes.CREATED).json({ flight });
 };
 
 const getAllFlights = async (req, res) => {
-  const flights = await Flight.find({});
-  res.status(StatusCodes.OK).json({ flights, count: flights.length });
+  const flight = await Flights.find({});
+  res.status(StatusCodes.OK).json({ flight, count: flight.length });
 };
 
 const getSingleFlight = async (req, res) => {
   const { id: flightId } = req.params;
-  const flight = await Flight.findOne({ _id: flightId })
-    .populate('reviews')
-    .populate('departureFlights');
+  const flight = await Flights.findOne({
+    _id: flightId,
+  });
 
   if (!flight) {
-    throw new CustomError.NotFoundError(`No flight with id : ${flightId}`);
+    throw new CustomError.NotFoundError(`No flight with id : ${flight}`);
   }
 
   res.status(StatusCodes.OK).json({ flight });
@@ -41,13 +54,13 @@ const getSingleFlight = async (req, res) => {
 
 const updateFlight = async (req, res) => {
   const { id: flightId } = req.params;
-  const flight = await Flight.findOneAndUpdate({ _id: flightId }, req.body, {
+  const flight = await Flights.findOneAndUpdate({ _id: flightId }, req.body, {
     new: true,
     runValidators: true,
   });
 
   if (!flight) {
-    throw new CustomError.NotFoundError(`No flight with id : ${flightId}`);
+    throw new CustomError.NotFoundError(`No flight with id : ${flight}`);
   }
 
   res.status(StatusCodes.OK).json({ flight });
@@ -55,14 +68,23 @@ const updateFlight = async (req, res) => {
 
 const deleteFlight = async (req, res) => {
   const { id: flightId } = req.params;
-  const flight = await Flight.findOne({ _id: flightId });
+  const flight = await Flights.findOne({
+    _id: flightId,
+  });
 
   if (!flight) {
-    throw new CustomError.NotFoundError(`No flight with id : ${flightId}`);
+    throw new CustomError.NotFoundError(`No flight with id : ${flight}`);
   }
 
-  await flight.remove();
+  await Flights.remove();
   res.status(StatusCodes.OK).json({ msg: 'flight deleted successfully' });
+};
+
+const getPlaceFlight = async (req, res) => {
+  const { id: placeId } = req.params;
+  console.log(req.params);
+  const flights = await Flights.find({ place: placeId });
+  res.status(StatusCodes.OK).json({ flights, count: flights.length });
 };
 
 module.exports = {
@@ -71,4 +93,5 @@ module.exports = {
   getSingleFlight,
   updateFlight,
   deleteFlight,
+  getPlaceFlight,
 };

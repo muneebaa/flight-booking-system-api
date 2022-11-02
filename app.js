@@ -25,10 +25,11 @@ const mongoSanitize = require('express-mongo-sanitize');
 const connectDB = require('./db/connect');
 const authRouter = require('./routes/authRoutes');
 const userRouter = require('./routes/userRoutes');
-const flightRouter = require('./routes/flightRoutes');
+const placesRouter = require('./routes/placesRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
-const departureFlightRouter = require('./routes/departureFlightRoutes');
+const flightsRouter = require('./routes/flightsRoutes');
 const bookFlightRouter = require('./routes/bookFlight');
+const seatRouter = require('./routes/seatsRoute');
 
 //middleware
 const notFoundMiddleware = require('./middleware/not-found');
@@ -51,18 +52,15 @@ app.use(express.static('./public'));
 app.use(fileUpload({ useTempFiles: true }));
 app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 
-app.get('/', (req, res) => {
-  console.log(req.cookies);
-  res.send('flight-booking-system');
-});
-
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
-app.use('/api/v1/flights', flightRouter);
+app.use('/api/v1/places', placesRouter);
 app.use('/api/v1/reviews', reviewRouter);
-app.use('/api/v1/departureFlights', departureFlightRouter);
+app.use('/api/v1/flights', flightsRouter);
 app.use('/api/v1/bookflight', bookFlightRouter);
+app.use('/api/v1/flightseats', seatRouter);
 
+app.use(notFoundMiddleware);
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Credentials', true);
   res.header('Access-Control-Allow-Origin', req.headers.origin);
@@ -76,9 +74,7 @@ app.use(function (req, res, next) {
   );
   next();
 });
-
 app.use(errorHandlerMiddleware);
-app.use(notFoundMiddleware);
 
 const port = process.env.PORT || 5000;
 

@@ -2,15 +2,7 @@ const mongoose = require('mongoose');
 
 const bookFlight = mongoose.Schema(
   {
-    flightClass: {
-      type: String,
-      required: [true, 'Please provide flight type'],
-      enum: {
-        values: ['Economy', 'Business', 'First'],
-        message: '{VALUE} is not supported',
-      },
-    },
-    name: {
+    passenger_name: {
       type: String,
       required: [true, 'Please provide name of Passenger '],
     },
@@ -18,19 +10,47 @@ const bookFlight = mongoose.Schema(
       type: String,
       required: [true, 'Please provide email '],
     },
-    phoneNumber: {
+    contact_number: {
       type: Number,
       required: [true, 'Please provide phone number'],
+    },
+    DOB: {
+      type: String,
+      required: [true, 'Please provide date of birth'],
     },
     address: {
       type: String,
       required: [true, 'Please provide address of the passenger'],
     },
-    seatNo: {
+    emergency_person_name: {
+      type: String,
+      required: [true, 'Please provide emergency person name'],
+    },
+    emergency_contact_number: {
+      type: Number,
+      required: [true, 'Please provide emergency person contact'],
+    },
+    emergency_contact_email: {
+      type: String,
+      required: [true, 'Please provide emergency person email'],
+    },
+    flight_class: {
+      type: String,
+      required: [true, 'Please provide flight type'],
+      enum: {
+        values: ['Economy', 'Business', 'First'],
+        message: '{VALUE} is not supported',
+      },
+    },
+    billed: {
+      type: Boolean,
+      required: [true, 'Please provide bill to continue'],
+    },
+    seat_no: {
       type: String,
       required: [true, 'Please provide end time of the flight'],
     },
-    price: {
+    subtotal: {
       type: Number,
       required: [true, 'Please provide price'],
     },
@@ -42,16 +62,12 @@ const bookFlight = mongoose.Schema(
       type: Number,
       required: [true, 'Please provide totalAmount'],
     },
-    billed: {
-      type: Boolean,
-      required: [true, 'Please provide bill to continue'],
-    },
     user: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',
       required: true,
     },
-    departureFlight: {
+    flight: {
       type: mongoose.Schema.ObjectId,
       ref: 'DepartureFlight',
       required: true,

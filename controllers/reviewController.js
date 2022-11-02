@@ -1,5 +1,5 @@
 const Review = require('../models/Review');
-const Flight = require('../models/Flight');
+const Flight = require('../models/Places');
 
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');

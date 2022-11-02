@@ -1,5 +1,6 @@
 const { StatusCodes } = require('http-status-codes');
 const BookFlight = require('../models/bookFlight');
+const Seat = require('../models/Seats');
 
 const CustomError = require('../errors');
 
@@ -7,21 +8,20 @@ const createBookFlight = async (req, res) => {
   req.body.user = req.user.userId;
 
   if (req.body.flightClass === 'Economy') {
-    req.body.price;
+    req.body.subtotal;
   } else if (req.body.flightClass === 'Business') {
-    req.body.price += 300;
+    req.body.subtotal += 300;
   } else {
-    req.body.price += 900;
+    req.body.subtotal += 900;
   }
-  console.log(req.body.price);
 
-  req.body.total = req.body.tax + req.body.price;
+  req.body.total = req.body.tax + req.body.subtotal;
 
-  const checkSeat = await BookFlight.findOne({ seatNo: req.body.seatNo });
-
+  const checkSeat = await BookFlight.findOne({ seat_no: req.body.seat_no });
+  console.log(checkSeat);
   if (checkSeat) {
     throw new CustomError.BadRequestError(
-      `Please Choose another seat, ${req.body.seatNo} is already booked`
+      `Please Choose another seat, ${req.body.seat_no} is already booked`
     );
   }
 

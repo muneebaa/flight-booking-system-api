@@ -11,13 +11,7 @@ const {
   getSingleFlight,
   updateFlight,
   deleteFlight,
-} = require('../controllers/flightsController');
-
-const {
-  getAllFlightDeptFLights,
-} = require('../controllers/departureFlightController');
-
-const { getSingleFlightReview } = require('../controllers/reviewController');
+} = require('../controllers/FlightsController');
 
 router
   .route('/')
@@ -26,11 +20,8 @@ router
 
 router
   .route('/:id')
-  .get(getSingleFlight)
+  .get(authenticateUser, getSingleFlight)
   .patch([authenticateUser, authorizePermissions('admin')], updateFlight)
   .delete([authenticateUser, authorizePermissions('admin')], deleteFlight);
-
-router.route('/:id/departureFlights').get(getAllFlightDeptFLights);
-router.route('/:id/reviews').get(getSingleFlightReview);
 
 module.exports = router;

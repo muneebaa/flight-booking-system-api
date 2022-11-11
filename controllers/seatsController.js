@@ -18,22 +18,21 @@ const createSeatsFlight = async (req, res) => {
 
   const alreadySubmitted = await Seats.findOne({
     number: req.body.number,
+    product: req.body.flight,
   });
 
   if (alreadySubmitted) {
-    throw new CustomError.BadRequestError(
-      `The seat number ${req.body.number} is already created`
-    );
+    throw new CustomError.BadRequestError(`Already created`);
   }
 
   const seats = await Seats.create(req.body);
-  console.log(req.body);
 
   res.status(StatusCodes.CREATED).json({ seats });
 };
 
 const getAllSeats = async (req, res) => {
   const seats = await Seats.find({});
+  console.log(seats);
   res.status(StatusCodes.OK).json({ seats, count: seats.length });
 };
 
@@ -66,15 +65,13 @@ const updateSeat = async (req, res) => {
 
 const deleteSeat = async (req, res) => {
   const { id: seatId } = req.params;
-  const seat = await Seats.findOne({
-    _id: seatId,
-  });
+  const seat = await Seats.findOne({ _id: seatId });
 
   if (!seat) {
-    throw new CustomError.NotFoundError(`No seat with id : ${seat}`);
+    throw new CustomError.NotFoundError(`No seat with id : ${seatId}`);
   }
 
-  await Seats.remove();
+  await seat.remove();
   res.status(StatusCodes.OK).json({ msg: 'seat deleted successfully' });
 };
 

@@ -18,7 +18,6 @@ const createBookFlight = async (req, res) => {
   req.body.total = req.body.tax + req.body.subtotal;
 
   const checkSeat = await BookFlight.findOne({ seat_no: req.body.seat_no });
-  console.log(checkSeat);
   if (checkSeat) {
     throw new CustomError.BadRequestError(
       `Please Choose another seat, ${req.body.seat_no} is already booked`

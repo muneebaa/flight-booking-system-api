@@ -68,21 +68,18 @@ const updateFlight = async (req, res) => {
 
 const deleteFlight = async (req, res) => {
   const { id: flightId } = req.params;
-  const flight = await Flights.findOne({
-    _id: flightId,
-  });
+  const flight = await Flights.findOne({ _id: flightId });
 
   if (!flight) {
     throw new CustomError.NotFoundError(`No flight with id : ${flight}`);
   }
 
-  await Flights.remove();
+  await flight.remove();
   res.status(StatusCodes.OK).json({ msg: 'flight deleted successfully' });
 };
 
 const getPlaceFlight = async (req, res) => {
   const { id: placeId } = req.params;
-  console.log(req.params);
   const flights = await Flights.find({ place: placeId });
   res.status(StatusCodes.OK).json({ flights, count: flights.length });
 };

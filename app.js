@@ -42,9 +42,16 @@ app.use(
     max: 60,
   })
 );
-app.use(helmet());
-app.use(xss());
+app.use(helmet()); // for security reasons for our headers
+app.use(xss()); // converts special charfacters such as < , > ,
 app.use(mongoSanitize());
+//  |
+//  ^
+// By default, $ and . characters are removed completely from user-supplied input in the following places:
+// - req.body
+// - req.params
+// - req.headers
+// - req.query
 
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));

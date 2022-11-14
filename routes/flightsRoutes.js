@@ -11,7 +11,7 @@ const {
   getSingleFlight,
   updateFlight,
   deleteFlight,
-} = require('../controllers/FlightsController');
+} = require('../controllers/flightsController');
 
 router
   .route('/')

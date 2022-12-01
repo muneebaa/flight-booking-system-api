@@ -13,6 +13,8 @@ const {
   deleteFlight,
 } = require('../controllers/flightsController');
 
+const { getFlightSeats } = require('../controllers/seatsController');
+
 router
   .route('/')
   .post([authenticateUser, authorizePermissions('admin')], createFlight)
@@ -23,5 +25,7 @@ router
   .get(authenticateUser, getSingleFlight)
   .patch([authenticateUser, authorizePermissions('admin')], updateFlight)
   .delete([authenticateUser, authorizePermissions('admin')], deleteFlight);
+
+router.route('/:id/seats').get(getFlightSeats);
 
 module.exports = router;

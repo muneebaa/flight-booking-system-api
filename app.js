@@ -36,12 +36,12 @@ const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
 
 app.set('trust proxy', 1);
-app.use(
-  rateLimiter({
-    windowMs: 15 * 60 * 1000,
-    max: 60,
-  })
-);
+// app.use(
+//   rateLimiter({
+//     windowMs: 15 * 60 * 1000,
+//     max: 60,
+//   })
+// );
 app.use(helmet()); // for security reasons for our headers
 app.use(xss()); // converts special charfacters such as < , > ,
 app.use(mongoSanitize());

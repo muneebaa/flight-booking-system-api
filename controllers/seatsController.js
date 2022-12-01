@@ -18,7 +18,8 @@ const createSeatsFlight = async (req, res) => {
 
   const alreadySubmitted = await Seats.findOne({
     number: req.body.number,
-    product: req.body.flight,
+    flight: req.body.flight,
+    user: req.body.user,
   });
 
   if (alreadySubmitted) {
@@ -32,7 +33,6 @@ const createSeatsFlight = async (req, res) => {
 
 const getAllSeats = async (req, res) => {
   const seats = await Seats.find({});
-  console.log(seats);
   res.status(StatusCodes.OK).json({ seats, count: seats.length });
 };
 
@@ -47,6 +47,12 @@ const getSingleSeat = async (req, res) => {
   }
 
   res.status(StatusCodes.OK).json({ seat });
+};
+
+const getFlightSeats = async (req, res) => {
+  const { id: flightId } = req.params;
+  const seats = await Seats.find({ flight: flightId });
+  res.status(StatusCodes.OK).json({ seats, count: seats.length });
 };
 
 const updateSeat = async (req, res) => {
@@ -81,4 +87,5 @@ module.exports = {
   getSingleSeat,
   updateSeat,
   deleteSeat,
+  getFlightSeats,
 };

@@ -10,6 +10,10 @@ const bookFlight = mongoose.Schema(
       type: String,
       required: [true, 'Please provide email '],
     },
+    company: {
+      type: String,
+      required: [true, 'Please provide flight company '],
+    },
     address: {
       type: String,
       required: [true, 'Please provide address '],
